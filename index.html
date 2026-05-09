@@ -42,6 +42,47 @@
             position: relative;
             z-index: 1;
         }
+        .top-exam-header {
+            text-align: center;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #1e2b3c, #2c4b5e);
+            border-bottom: 3px solid #ffb347;
+            position: relative;
+            overflow: hidden;
+        }
+        .animated-title {
+            display: inline-block;
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #FFE6B0, #FFB347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(255,180,71,0.3);
+            animation: glint 2s ease-in-out infinite, floatStars 3s ease-in-out infinite;
+            position: relative;
+            letter-spacing: 2px;
+        }
+        @keyframes glint {
+            0% { text-shadow: 0 0 2px rgba(255,180,71,0.2); opacity: 0.9; }
+            50% { text-shadow: 0 0 20px rgba(255,180,71,0.8); opacity: 1; }
+            100% { text-shadow: 0 0 2px rgba(255,180,71,0.2); opacity: 0.9; }
+        }
+        @keyframes floatStars {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+            100% { transform: translateY(0px); }
+        }
+        .star-left, .star-right {
+            display: inline-block;
+            font-size: 1.8rem;
+            animation: floatStars 2.5s ease-in-out infinite, glowStar 1.5s alternate infinite;
+            margin: 0 8px;
+        }
+        @keyframes glowStar {
+            0% { text-shadow: 0 0 2px gold; opacity: 0.7; transform: scale(1);}
+            100% { text-shadow: 0 0 15px #ffcc00; opacity: 1; transform: scale(1.1);}
+        }
         .header {
             background: #1e2b3c;
             padding: 20px 32px;
@@ -188,12 +229,17 @@
             85% { opacity: 1; transform: translateX(-50%) translateY(0); }
             100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
         }
-        @media (max-width: 700px) { .main-panel { padding: 20px; } .question-text { font-size: 1.2rem; } .result-score { font-size: 2rem; } }
+        @media (max-width: 700px) { .main-panel { padding: 20px; } .question-text { font-size: 1.2rem; } .result-score { font-size: 2rem; } .animated-title { font-size: 1.3rem; } .star-left, .star-right { font-size: 1.3rem; } }
     </style>
 </head>
 <body>
 <canvas id="fireworksCanvas"></canvas>
 <div class="app-container">
+    <div class="top-exam-header">
+        <span class="star-left">✨</span>
+        <span class="animated-title">موقع اختبارات الصفحة الاولى</span>
+        <span class="star-right">✨</span>
+    </div>
     <div class="header">
         <div class="logo"><h1>📚 نظام اختبارات الطلاب</h1><p>أدخل بياناتك لبدء الاختبار</p></div>
         <div class="user-greeting" id="greetingSpan">مرحباً، طالبنا العزيز</div>
@@ -247,8 +293,8 @@
 
 <script>
     (function(){
-        let EXAMS_DATA = [];
-        let STUDENT_ATTEMPTS = new Map(Object.entries({"يحيى هود محمد عبدالقادر_exam_1778081736064_8385":{"score":1,"total":1,"percentage":100,"date":"6‏/5‏/2026 5:36:12 م"},"يحيى هود محمد عبدالقادر_exam_1778082462664_7073":{"score":1,"total":1,"percentage":100,"date":"6‏/5‏/2026 5:48:04 م"},"يحيى هود محمد عبدالقادر_exam_1778309865685_8564":{"score":0,"total":1,"percentage":0,"date":"9‏/5‏/2026 9:12:49 ص"},"يحيى هود محمد عبدالقادر_exam_1778309942342_9335":{"score":0,"total":1,"percentage":0,"date":"9‏/5‏/2026 9:12:53 ص"}}));
+        let EXAMS_DATA = [{"id":"exam_1778337208985_6073","title":"رياضيات","timeLimitMinutes":60,"expiryDate":"2026-10-09T16:25","attemptType":"multiple","targetStage":"primary1","creationTimestamp":1778337208985,"creationDate":"2026-05-09T14:33:28.985Z","questions":[{"text":"1+1=","options":["1","2","8","8","9"],"correct":"B"},{"text":"3+5=","options":["4","5","3","8","0"],"correct":"D"},{"text":"4+4=","options":["9","8","4","4","0"],"correct":"B"},{"text":"6×1=","options":["6","7","1","5+1","A and D"],"correct":"E"},{"text":"5-4=","options":["9","5","4","1","9-3"],"correct":"D"},{"text":"6-1+1=","options":["6","7","8","0","7"],"correct":"A"}]}];
+        let STUDENT_ATTEMPTS = new Map(Object.entries({}));
         let GENERAL_STUDENT_PASSWORD = "123";
         const STAGES = {"all":"جميع المراحل","primary1":"الصف الأول الابتدائي","primary2":"الصف الثاني الابتدائي","primary3":"الصف الثالث الابتدائي","primary4":"الصف الرابع الابتدائي","primary5":"الصف الخامس الابتدائي","primary6":"الصف السادس الابتدائي","middle1":"الصف الأول المتوسط","middle2":"الصف الثاني المتوسط","middle3":"الصف الثالث المتوسط","secondary1":"الصف الأول الثانوي","secondary2":"الصف الثاني الثانوي","secondary3":"الصف الثالث الثانوي"};
         
